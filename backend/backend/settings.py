@@ -37,9 +37,61 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    #JWT TEST with POSTMAN
+
+    'core',
+    'rest_framework',
+
+    #LOGIN
+    'rest_auth',
+    'rest_framework.authtoken',
+
+    #SIGNUP endpoint
+    'rest_auth.registration',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # communication between front and server via HTTP
+    'corsheaders',
 ]
 
+SITE_ID = 1
+REST_USE_JWT = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'   # if not, raise error
+
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES' : (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
+}
+
+import datetime
+
+JWT_AUTH = {
+    'JWT_SECRET_KEY': SECRET_KEY,
+    'JWT_ALGORITHM': 'HS256',
+    'JWT_ALLOW_REFRESH': True,
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=7)
+}
+
+AUTH_USER_MODEL = 'core.CustomUser'
+
+
+
+CORS_ORIGIN_ALLOW_ALL = True  # only for development mode
+CORS_ORIGIN_WHITELIST = ('http://127.0.0.1:59526',)   # allow for Frontend Server
+CORS_ALLOW_CREDENTIALS = True
+
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',   # add for corsheaders 
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
